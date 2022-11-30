@@ -11,20 +11,25 @@
 void print_dir(DIR *pdir, char *path);
 
 int main(int argc, char *argv[]) 
-{ 
+{ int i = 0;
 	DIR *pdir; 
 	char strBuffer[_MAX_PATH] = { 0, };
 	char *path = NULL;
-	
+	struct dirent *pde;
 	
 	path = getcwd( strBuffer, _MAX_PATH );
 	
 	printf("%s:\n", path);
-	if ((pdir = opendir(argv[0])) < 0 ) { 
+	if ((pdir = opendir(argv[1])) < 0 ) { 
 		perror("opendir"); 
 		exit(1); 
 	}
-	print_dir(pdir, path);
+	//print_dir(pdir, path);
+	while ((pde = readdir(pdir)) != NULL) {
+		printf("%10s ", pde->d_name);
+		if (++i % 4 == 0) 
+			printf("\n"); 
+	}
 	printf("\n");
 	closedir(pdir);
 	return 0; 
@@ -37,7 +42,11 @@ void print_dir(DIR *pdir, char *path){
 	char *dir_path;
 	
 	
-	while ((pde = readdir(pdir)) != NULL) { 
+	while ((pde = readdir(pdir)) != NULL) {
+		printf("%10s ", pde->d_name);
+				if (++i % 4 == 0) 
+					printf("\n"); 
+		/*
 		if(!strcmp(pde->d_name, ".") || !strcmp(pde->d_name, "..")){
         	    continue;
         	}// 현재 또는 상위일 경우 제외
@@ -49,9 +58,8 @@ void print_dir(DIR *pdir, char *path){
 			printf("%10s ", pde->d_name);
 			if (++i % 4 == 0) 
 				printf("\n");
-		}	
+		}*/	
 	}
-	printf("%s", dir_path);
 	printf("\n");
 }
 
